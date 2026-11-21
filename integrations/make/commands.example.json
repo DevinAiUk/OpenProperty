@@ -1,0 +1,64 @@
+[
+  {
+    "eventId": "5d8f743e-201c-44e8-b665-0f7d29d25a00",
+    "callId": "5e1f67d3-15e2-4d6d-8df1-1bf8e3ad093a",
+    "action": "lookup_listings",
+    "input": {
+      "location": "St. Petersburg",
+      "maxRent": 2200,
+      "bedrooms": 2,
+      "moveIn": "2030-06-01"
+    }
+  },
+  {
+    "eventId": "5d8f743e-201c-44e8-b665-0f7d29d25a01",
+    "callId": "5e1f67d3-15e2-4d6d-8df1-1bf8e3ad093a",
+    "action": "capture_inquiry",
+    "input": {
+      "name": "Alex Rivera",
+      "email": "alex@example.test",
+      "phone": "+12025550142",
+      "budget": 2200,
+      "location": "St. Petersburg",
+      "moveIn": "2030-06-01",
+      "bedrooms": 2,
+      "listingId": "91ab9457-fed9-4c64-b8fc-4879353d7313",
+      "confirmed": true
+    }
+  },
+  {
+    "eventId": "5d8f743e-201c-44e8-b665-0f7d29d25a02",
+    "callId": "5e1f67d3-15e2-4d6d-8df1-1bf8e3ad093a",
+    "action": "available_slots",
+    "input": {
+      "listingId": "91ab9457-fed9-4c64-b8fc-4879353d7313"
+    }
+  },
+  {
+    "eventId": "5d8f743e-201c-44e8-b665-0f7d29d25a03",
+    "callId": "5e1f67d3-15e2-4d6d-8df1-1bf8e3ad093a",
+    "action": "book_showing",
+    "input": {
+      "slotId": "ccdee706-0f69-418b-8c15-3ecc1acf60b6",
+      "confirmed": true
+    }
+  },
+  {
+    "eventId": "5d8f743e-201c-44e8-b665-0f7d29d25a04",
+    "callId": "5e1f67d3-15e2-4d6d-8df1-1bf8e3ad093a",
+    "action": "summarize_call",
+    "input": {
+      "summary": "Alex requested a two-bedroom property in St. Petersburg and chose a showing.",
+      "nextAction": "Landlord to prepare for the showing."
+    }
+  },
+  {
+    "eventId": "5d8f743e-201c-44e8-b665-0f7d29d25a05",
+    "callId": "5e1f67d3-15e2-4d6d-8df1-1bf8e3ad093a",
+    "action": "request_callback",
+    "input": {
+      "reason": "Alex has a question about the application documents.",
+      "phone": "+12025550142"
+    }
+  }
+]

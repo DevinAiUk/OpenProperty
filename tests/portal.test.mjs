@@ -4,19 +4,20 @@ import {readFile} from 'node:fs/promises';
 import {PGlite} from '@electric-sql/pglite';
 import worker from '../dist/server/index.js';
 const origin='https://sill.test',env={DATABASE_URL:'postgresql://sill_runtime:fixture@ep-fixture.example.test/db',BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:'fixture-only-'+crypto.randomUUID()};
+let providerFetch=async()=>{throw Error('Unexpected outbound request');};
 const engine=new PGlite(),originalFetch=globalThis.fetch;
 before(async()=>{
- for(const file of ['001_init.sql','002_delivery.sql'])await engine.exec(await readFile(new URL('../db/'+file,import.meta.url),'utf8'));
+ for(const file of ['001_init.sql','002_delivery.sql','003_leasing.sql','004_leasing_actions.sql'])await engine.exec(await readFile(new URL('../db/'+file,import.meta.url),'utf8'));
  await engine.exec('CREATE ROLE sill_runtime NOSUPERUSER NOBYPASSRLS');
  await engine.exec(await readFile(new URL('../db/runtime-grants.sql',import.meta.url),'utf8'));
  await engine.exec('SET ROLE sill_runtime');
  // Exercise the real Worker, Better Auth, Drizzle and SQL using a local PostgreSQL engine.
  globalThis.fetch=async(input,options)=>{
-  if(!String(input).endsWith('/sql'))throw Error('Unexpected outbound request');
+  if(!String(input).endsWith('/sql'))return providerFetch(String(input),options);
   const payload=JSON.parse(options.body);
   async function run(db,q){
    const r=await db.query(q.query,q.params,{rowMode:'array'});
-   const raw=v=>v===null?null:v instanceof Date?v.toISOString():typeof v==='boolean'?(v?'t':'f'):String(v);
+   const raw=v=>v===null?null:v instanceof Date?v.toISOString():typeof v==='boolean'?(v?'t':'f'):typeof v==='object'?JSON.stringify(v):String(v);
    return {rowCount:r.affectedRows??r.rows.length,fields:r.fields,rows:r.rows.map(row=>row.map(raw)),command:q.query.trim().split(' ')[0].toUpperCase()};
   }
   try{return Response.json(payload.queries?{results:await engine.transaction(async tx=>{const result=[];for(const q of payload.queries)result.push(await run(tx,q));return result;})}:await run(engine,payload));}
@@ -24,12 +25,13 @@ before(async()=>{
  };
 });
 after(async()=>{globalThis.fetch=originalFetch;await engine.close();});
-async function request(path,{cookie,home,data,bearer}={}){
- const r=await worker.fetch(new Request(origin+path,{method:data?'POST':'GET',headers:{origin,...(cookie?{cookie}:{}),...(home?{'x-sill-home':home}:{}),...(bearer?{authorization:'Bearer '+bearer}:{}),...(data?{'content-type':'application/json'}:{})},body:data?JSON.stringify(data):undefined}),env);
+let nextFixtureIp=1;
+async function request(path,{cookie,home,data,bearer,portfolio,ip}={}){
+ const r=await worker.fetch(new Request(origin+path,{method:data?'POST':'GET',headers:{origin,'cf-connecting-ip':ip||'192.0.2.200',...(cookie?{cookie}:{}),...(home?{'x-sill-home':home}:{}),...(portfolio?{'x-sill-portfolio':portfolio}:{}),...(bearer?{authorization:'Bearer '+bearer}:{}),...(data?{'content-type':'application/json'}:{})},body:data?JSON.stringify(data):undefined}),env);
  return {status:r.status,cookie:r.headers.getSetCookie().map(v=>v.split(';')[0]).join('; '),body:r.headers.get('content-type')?.includes('json')?await r.json():await r.text()};
 }
 async function account(email){
- const r=await request('/api/auth/sign-up/email',{data:{name:'Fixture',email,password:'Test-password-1234!'}});assert.equal(r.status,200,JSON.stringify(r.body));assert.ok(r.cookie);return r.cookie;
+ const r=await request('/api/auth/sign-up/email',{ip:'192.0.2.'+nextFixtureIp++,data:{name:'Fixture',email,password:'Test-password-1234!'}});assert.equal(r.status,200,JSON.stringify(r.body));assert.ok(r.cookie);return r.cookie;
 }
 async function createHome(cookie,name){
  const p=await request('/api/portfolios',{cookie,data:{name}});assert.equal(p.status,201,JSON.stringify(p.body));
@@ -86,3 +88,8 @@ test('Public pages, contact persistence, chat fallback and discovery',async()=>{
  const rpc=await request('/mcp',{data:{jsonrpc:'2.0',id:1,method:'tools/list'}});assert.equal(rpc.body.result.tools.length,4);
 });
 
+
+import {verifyLeasing} from './support/leasing-flow.mjs';
+test('Landlord access, Vapi to Google booking, Make receipts and failure recovery',()=>verifyLeasing({
+ env,engine,account,request,setProvider(fn){providerFetch=fn;}
+}));

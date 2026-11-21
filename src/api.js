@@ -1,3 +1,4 @@
+import {leasingApi} from './leasing/api.js';
 import {sql} from 'drizzle-orm';
 import {services,demand,field,choice,uuid,rows,scoped,hash,token,limit,Problem} from './db.js';
 import {categories,urgencies,statuses,createTicket,readTickets,updateTicket,readEvents} from './tickets.js';
@@ -25,9 +26,10 @@ function checkout(value){
  let u;try{u=new URL(value);}catch{throw new Problem(400,'Use a valid HTTPS payment link.');}
  demand(u.protocol==='https:'&&!u.username&&!u.password,400,'Use a secure payment link.');return u.href;
 }
-export async function api(req,env){
+export async function api(req,env,ctx){
  const url=new URL(req.url),p=url.pathname,method=req.method;
  const post=method==='POST', get=method==='GET';
+ if(p.startsWith('/api/leasing/'))return leasingApi(req,env,body,ctx);
  if(p==='/api/health'&&get)return json({service:'sill',status:'up'});
  // Tool discovery is public; running a tool always requires a household key.
  if((p==='/mcp'||p==='/api/mcp')&&post){

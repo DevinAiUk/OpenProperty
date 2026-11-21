@@ -57,6 +57,7 @@ async function render(){
  $('#signout').onclick=async()=>{try{await api('auth/sign-out',{});sessionStorage.removeItem('sill-home');home=null;me=null;generation++;login();}catch(e){$('#portal-body').textContent=e.message;}};
  if(home)$('#house').onchange=e=>start(e.target.value);
  portal.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{section=b.dataset.tab;history.replaceState(null,'','/portal?view='+section);render();});
+ if(me.portfolios?.length){const a=document.createElement('a');a.href='/leasing';a.className='btn light';a.textContent='Landlord workspace';portal.querySelector('.tabbar')?.after(a);if(!a.isConnected)portal.prepend(a);}
  const box=$('#portal-body');
  if(!home){box.innerHTML='<div class="notice">Join your home with an invitation, or create a portfolio if you manage properties.</div><div class="portal-grid">'+claim()+createPortfolio()+addHome()+'</div>';wireSetup();return;}
  try{

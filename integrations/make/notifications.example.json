@@ -1,0 +1,56 @@
+[
+  {
+    "version": 1,
+    "leadId": null,
+    "contact": {
+      "name": "",
+      "email": null,
+      "phone": null
+    },
+    "preferences": {},
+    "booking": null,
+    "notifyTo": "leasing-team@example.test",
+    "crmMap": {
+      "leadKey": "sill_lead_id",
+      "email": "email",
+      "phone": "phone",
+      "budget": "",
+      "location": "",
+      "moveIn": "",
+      "bedrooms": "",
+      "summary": "",
+      "nextAction": ""
+    },
+    "eventId": "vapi:caf5c02f-ef70-4b35-94f6-845d6bac82eb:tool-02:handoff",
+    "kind": "handoff.notify",
+    "summary": "Caller asked the team to explain the application documents.",
+    "nextAction": "Callback · needs_contact"
+  },
+  {
+    "version": 1,
+    "leadId": null,
+    "contact": {
+      "name": "",
+      "email": null,
+      "phone": null
+    },
+    "preferences": {},
+    "booking": null,
+    "notifyTo": "leasing-team@example.test",
+    "crmMap": {
+      "leadKey": "sill_lead_id",
+      "email": "email",
+      "phone": "phone",
+      "budget": "",
+      "location": "",
+      "moveIn": "",
+      "bedrooms": "",
+      "summary": "",
+      "nextAction": ""
+    },
+    "eventId": "ended:caf5c02f-ef70-4b35-94f6-845d6bac82eb",
+    "kind": "landlord.notify",
+    "summary": "",
+    "nextAction": ""
+  }
+]
