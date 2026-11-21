@@ -2,6 +2,10 @@
 
 SiLL is a resident and property-manager portal for real households. It runs as a Cloudflare Worker with Better Auth, Drizzle and Neon PostgreSQL. The public site includes Docs, Blog, About us, Contact, and a resident assistant. The application code is MIT licensed. The original MIT notice is in LICENSE.
 
+## Landlord workspace
+
+Open **Landlord workspace** from a manager account, or visit [/leasing/demo](https://sill.ing/leasing/demo) to try a sample inquiry. The [leasing setup guide](docs/leasing.md) describes the architecture, data model, cash-flow calculations and provider connections.
+
 ## Run the portal
 
 Use Node 24 and npm. Create a new Neon database. Run migrations with an owner connection, then use a separate unprivileged login for the application. Database URLs and provider tokens belong in secret bindings.

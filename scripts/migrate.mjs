@@ -8,7 +8,7 @@ try{
  await client.query('BEGIN');
  await client.query('CREATE TABLE IF NOT EXISTS sill_migrations(version text primary key)');
  await client.query("SELECT pg_advisory_xact_lock(hashtext('sill_migrations'))");
- for(const file of ['001_init.sql','002_delivery.sql']){
+ for(const file of ['001_init.sql','002_delivery.sql','003_leasing.sql','004_leasing_actions.sql']){
   const version=file.slice(0,3);
   if((await client.query('SELECT 1 FROM sill_migrations WHERE version=$1',[version])).rowCount)continue;
   await client.query(readFileSync(new URL('../db/'+file,import.meta.url),'utf8'));

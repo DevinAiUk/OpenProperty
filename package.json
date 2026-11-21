@@ -9,7 +9,7 @@
     "dev": "node scripts/dev.mjs",
     "deploy": "npm run build && wrangler deploy",
     "db:migrate": "node scripts/migrate.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs integrations/vapi/*.test.mjs"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.26",

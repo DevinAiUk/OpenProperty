@@ -4,9 +4,13 @@ import { sql } from 'drizzle-orm';
 import { betterAuth } from 'better-auth/minimal';
 import { drizzleAdapter } from '@better-auth/drizzle-adapter';
 import * as schema from './schema.js';
+export function database(env){
+  if (!env.DATABASE_URL) throw new Problem(503,'Database connection is unavailable.');
+  return drizzle(neon(env.DATABASE_URL),{schema});
+}
 export function services(env){
   if (!env.DATABASE_URL || !env.BETTER_AUTH_SECRET || !env.BETTER_AUTH_URL) throw new Problem(503,'Account services are temporarily unavailable.');
-  const db=drizzle(neon(env.DATABASE_URL),{schema});
+  const db=database(env);
   const auth=betterAuth({appName:'SiLL',baseURL:env.BETTER_AUTH_URL,secret:env.BETTER_AUTH_SECRET,
     database:drizzleAdapter(db,{provider:'pg',schema,transaction:false}),emailAndPassword:{enabled:true,minPasswordLength:12},
     advanced:{ipAddress:{ipAddressHeaders:['cf-connecting-ip']}},trustedOrigins:[env.BETTER_AUTH_URL],rateLimit:{enabled:true,storage:'memory'}});

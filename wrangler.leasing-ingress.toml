@@ -1,0 +1,7 @@
+name = "sill-leasing-ingress"
+main = "src/leasing/ingress.js"
+compatibility_date = "2026-02-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+[triggers]
+crons = ["*/5 * * * *"]

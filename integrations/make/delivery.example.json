@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "eventId": "make:5d8f743e-201c-44e8-b665-0f7d29d25a04:crm",
+  "kind": "crm.upsert",
+  "leadId": "d5971907-4ebf-4a59-b032-7c440903c1b3",
+  "contact": {
+    "name": "Alex Rivera",
+    "phone": "+12025550142",
+    "email": "alex@example.test"
+  },
+  "preferences": {
+    "budget": 2200,
+    "location": "St. Petersburg",
+    "moveIn": "2030-06-01",
+    "bedrooms": 2,
+    "listingId": "91ab9457-fed9-4c64-b8fc-4879353d7313"
+  },
+  "summary": "Alex requested a two-bedroom property in St. Petersburg and chose a showing.",
+  "nextAction": "Landlord to prepare for the showing.",
+  "booking": {
+    "id": "abdc8d40-abb1-4a08-8340-29b65ea94264",
+    "leadId": "d5971907-4ebf-4a59-b032-7c440903c1b3",
+    "slotId": "ccdee706-0f69-418b-8c15-3ecc1acf60b6",
+    "listingId": "91ab9457-fed9-4c64-b8fc-4879353d7313",
+    "start": "2030-05-14T18:00:00.000Z",
+    "end": "2030-05-14T18:30:00.000Z",
+    "status": "confirmed",
+    "calendarEventId": "sillabdc8d40abb14a08834029b65ea94264"
+  },
+  "notifyTo": null,
+  "crmMap": {
+    "leadKey": "sill_lead_id",
+    "phone": "phone",
+    "email": "email",
+    "budget": "sill_budget",
+    "location": "sill_location",
+    "moveIn": "sill_move_in",
+    "bedrooms": "sill_bedrooms",
+    "summary": "sill_call_summary",
+    "nextAction": "sill_next_action"
+  }
+}

@@ -5,7 +5,10 @@ await mkdir('dist/server',{recursive:true});await mkdir('dist/.openai',{recursiv
 await copyFile('.openai/hosting.json','dist/.openai/hosting.json');
 const client=await build({entryPoints:['src/client.js'],bundle:true,format:'esm',minify:true,write:false,target:'es2022'});
 const assets={'/app.js':['text/javascript; charset=utf-8',Buffer.from(client.outputFiles[0].contents).toString('base64')]};
+const leasing=await build({entryPoints:['src/leasing/client.js'],bundle:true,format:'esm',minify:true,write:false,target:'es2022'});
+assets['/leasing.js']=['text/javascript; charset=utf-8',Buffer.from(leasing.outputFiles[0].contents).toString('base64')];
 const files={
+ '/leasing.css':['text/css; charset=utf-8','public/leasing.css'],
  '/style.css':['text/css; charset=utf-8','public/style.css'],
  '/assets/sill.png':['image/png','public/assets/sill.png'],
  '/assets/wordmark.png':['image/png','public/assets/wordmark.png'],
